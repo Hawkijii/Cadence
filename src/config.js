@@ -23,4 +23,4 @@ export const TICK_MS = 200;
 // Footer "Support this project" link. Set VITE_SUPPORT_URL in a .env file to
 // point it at your own Buy Me a Coffee page.
 export const SUPPORT_URL =
-  import.meta.env?.VITE_SUPPORT_URL || 'https://www.buymeacoffee.com/';
+  import.meta.env?.VITE_SUPPORT_URL || 'https://buymeacoffee.com/hawkiji/';
