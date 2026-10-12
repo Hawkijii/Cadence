@@ -1,0 +1,136 @@
+.typing {
+  --fs: clamp(1.3rem, 0.95rem + 1.5vw, 1.9rem);
+  --line-h: calc(var(--fs) * 1.95);
+  position: relative;
+  cursor: text;
+}
+
+/* A fixed three-line window: the layout never grows or jumps while typing. */
+.typing__viewport {
+  height: calc(var(--line-h) * 3);
+  overflow: hidden;
+  font-family: var(--font-mono);
+  font-size: var(--fs);
+  font-weight: 400;
+  line-height: var(--line-h);
+  font-variant-ligatures: none;
+  user-select: none;
+  -webkit-user-select: none;
+  transition: filter 0.2s var(--ease), opacity 0.2s var(--ease);
+}
+
+.typing__words {
+  position: relative;
+  display: flex;
+  flex-wrap: wrap;
+  column-gap: 1ch;
+  transition: transform 0.16s var(--ease);
+  will-change: transform;
+}
+
+.word {
+  white-space: nowrap;
+}
+
+/* No colour transitions on letters: feedback has to be instant. */
+.ch {
+  display: inline-block;
+  color: var(--muted);
+}
+
+.ch--ok {
+  color: var(--correct);
+}
+
+.ch--bad {
+  color: var(--error);
+  text-decoration: underline;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 0.18em;
+}
+
+.ch--miss {
+  color: var(--error);
+  opacity: 0.55;
+}
+
+.ch--extra {
+  color: var(--error);
+  opacity: 0.8;
+}
+
+.caret {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 2px;
+  height: 1.3em;
+  border-radius: 1px;
+  background: var(--accent);
+  pointer-events: none;
+  transition: transform 0.1s var(--ease);
+  will-change: transform;
+}
+
+/* The caret breathes only while waiting for the first keystroke, then stays steady. */
+.typing[data-status='idle'][data-focused='true'] .caret {
+  animation: caret-wait 1.3s ease-in-out infinite;
+}
+
+@keyframes caret-wait {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.15;
+  }
+}
+
+/* Lost focus: dim the passage and say how to get it back. */
+.typing__veil {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  padding: 0 1rem;
+  color: var(--text);
+  font-size: 0.9rem;
+  text-align: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s var(--ease);
+}
+
+.typing[data-focused='false'] .typing__veil {
+  opacity: 1;
+}
+
+/* While the theme picker is open, keys go to its search box, so don't promise otherwise. */
+.app:has(.picker) .typing__veil {
+  opacity: 0;
+}
+
+.typing[data-focused='false'] .typing__viewport {
+  filter: blur(4px);
+  opacity: 0.45;
+}
+
+.typing[data-status='finished'] .typing__viewport {
+  opacity: 0.35;
+}
+
+/* The real input: invisible, but focusable and always inside the viewport. */
+.typing__input {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  border: 0;
+  outline: none;
+  opacity: 0;
+  pointer-events: none;
+  font-size: 16px; /* anything smaller makes iOS zoom the page on focus */
+}

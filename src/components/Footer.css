@@ -1,0 +1,28 @@
+.footer {
+  display: flex;
+  justify-content: center;
+  padding: 1rem 0 1.25rem;
+  font-size: 0.75rem;
+}
+
+.footer__link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.35rem 0.6rem;
+  border-radius: 6px;
+  color: var(--dim);
+  text-decoration: none;
+  transition: color 0.15s var(--ease);
+}
+
+.footer__link:hover {
+  color: var(--text);
+}
+
+/* Keep it understated, but give fingers a fair target. */
+@media (pointer: coarse) {
+  .footer__link {
+    padding: 0.7rem 0.9rem;
+  }
+}

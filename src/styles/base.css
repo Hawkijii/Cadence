@@ -1,0 +1,152 @@
+/* Design tokens, reset and page layout.
+   Every theme-dependent colour is a CSS variable. The values below are the default
+   (Graphite) palette; applyTheme() overwrites them on <html> when a theme is chosen. */
+
+:root {
+  color-scheme: dark;
+
+  --bg: #1e1f22;
+  --surface: #27282c;
+  --border: #383a40;
+  --text: #d7d9dd;
+  --muted: #8d909a;
+  --dim: #858892;
+  --accent: #b4bac6;
+  --on-accent: #1e1f22;
+  --correct: #eef0f3;
+  --error: #ff7b72;
+
+  /* Derived from the palette, so they follow every theme change. */
+  --surface-hover: color-mix(in srgb, var(--text) 8%, var(--surface));
+  --accent-soft: color-mix(in srgb, var(--accent) 16%, transparent);
+  --veil: color-mix(in srgb, var(--bg) 72%, transparent);
+
+  --font-ui: 'Inter Variable', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+  --font-mono: 'JetBrains Mono Variable', ui-monospace, 'SF Mono', 'Cascadia Code', Menlo, Consolas, monospace;
+
+  --radius: 10px;
+  --ease: cubic-bezier(0.2, 0.7, 0.2, 1);
+  --gutter: clamp(1rem, 4vw, 3rem);
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  background-color: var(--bg);
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  min-height: 100dvh;
+  background-color: var(--bg);
+  color: var(--text);
+  font-family: var(--font-ui);
+  font-size: 1rem;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+  transition: background-color 0.2s var(--ease), color 0.2s var(--ease);
+}
+
+button,
+input {
+  font: inherit;
+  color: inherit;
+}
+
+button {
+  cursor: pointer;
+}
+
+/* The controls draw their own pressed/hover states; skip the browser's tap flash. */
+a,
+button,
+li {
+  -webkit-tap-highlight-color: transparent;
+}
+
+kbd {
+  display: inline-block;
+  padding: 0.05rem 0.4rem;
+  border: 1px solid var(--border);
+  border-radius: 5px;
+  background: var(--surface);
+  color: var(--muted);
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  line-height: 1.5;
+}
+
+::selection {
+  background: var(--accent-soft);
+}
+
+/* One consistent, visible keyboard focus indicator. */
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Page layout: header, a centred test, a quiet footer. */
+.app {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  min-height: 100dvh;
+  padding: 0 var(--gutter);
+}
+
+.main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 1.25rem;
+  width: 100%;
+  max-width: 62rem;
+  margin: 0 auto;
+  padding: 1rem 0 4vh;
+}
+
+/* Short screens: tighter vertical rhythm so the test stays on screen. */
+@media (max-height: 560px) {
+  .main {
+    gap: 0.75rem;
+    padding-bottom: 0;
+  }
+
+  .footer {
+    padding: 0.25rem 0 0.5rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
